@@ -26,9 +26,41 @@ def main(args):
                 title = e.text
                 # creating XML file
                 tocXml = TocFile.TocFile(args[1], title, args[2])
-
+        
+        # stopping at links and getting the doc link and topic name
+        
+        if (e.tag == "a"):
+            link = "html/" + e.attrib["href"]
+            print ("Link found: " + link)
+        if e.tag == "span" and "id" in e.attrib:
+                idString = e.attrib["id"]
+                topicName = e.text
+                print ("Topic info: " + topicName + " :: " + idString)
+            
+            
+            
+            
     tocXml.closeFile()
     f.close()
+
+def findNameID(sSpanString):
+    ''' (string) -> (string, string)
+    takes the inner Node of a link tag and
+    extracts the information in the inner span tag.
+    Returns a tuple of the caption id and the name of the topic
+    
+    >>> print(findNameID("<span id="s1" class="heading1">1 Einfuhrung - Was ist LabImage 1D</span>"))
+    ("s1", "1 Einfuhrung - Was ist LabImage 1D")
+    '''
+    spantree = lxml.html.fromstring(sSpanString)
+    for e in spantree.iter():
+        if e.tag == "span":
+            dbnjk = 5
+    return
+    
+
 if __name__ == "__main__":
-    import sys
-    main(sys.argv[1:])
+    # DEBUG
+    main(("test.html", "toc.xml", "test.link"))
+    #import sys
+    #main(sys.argv[1:])
