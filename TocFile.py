@@ -13,6 +13,10 @@ class TocFile:
         self.rootNode.set('label', sHelpFile)
         self.rootNode.set('topic', "html/" + sTopicLink)
         
+        #rootNode is parent topic for first topic
+        #and all topics on the first level
+        self.nodeTree = {1: self.rootNode}
+        
 
         
     def writeTopic(self, sTopicName, sTopicFile, sIdString):
@@ -20,6 +24,13 @@ class TocFile:
     Take the name of the topic, the link to the topic file and the id as string
     and creates the xml node accordingly. Places it in the tree as well
     '''
+        nCurrentNode = Element("topic")
+        nCurrentNode.set('label', sTopicName)
+        nCurrentNode.set('href', sTopicFile)
+        parentNode = self.evaluateID(sIdString, nCurrentNode)
+        
+        parentNode.append(nCurrentNode)
+        
         
 
     def evaluateID(self, sIdString, nCurrentNode):
@@ -27,19 +38,22 @@ class TocFile:
     Evaluate the id string of the node to find out where to place the node
     in the tree. Returns the parent node.
     '''
-        #id = transform(sIdString);
+        idNumber = self.transform(sIdString)
         # highest node, place right under rootNode
         # add current node for future child nodes
-        if id == 1:
-            self.nodeTree.Clear()
+        if idNumber == 1:
+            self.nodeTree.clear()
             self.nodeTree[1] = nCurrentNode
-            return self.nRootNode
+            return self.rootNode
 
         # if there is no node for this id,
         #create it and return parent node
-        if not id in self.nodeTree:
-            self.nodeTree[id] = nCurrentNode
-            return self.nodeTree[id - 1]
+        if not idNumber in self.nodeTree:
+            self.nodeTree[idNumber] = nCurrentNode
+            return self.nodeTree[idNumber - 1]
+        
+        # otherwise return node one level up
+        return self.nodeTree[idNumber-1]
         
     def transform(self, sIdString):
         '''(self, string) -> int
