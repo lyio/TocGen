@@ -36,6 +36,9 @@ def main(args):
                 idString = e.attrib["id"]
                 topicName = e.text
                 print ("Topic info: " + topicName + " :: " + idString)
+                
+                # with link, topicName and idString identified, write topic
+                tocXml.writeTopic(topicName, link, idString)
             
             
             

@@ -9,7 +9,10 @@ class TocFile:
     def __init__(self, sFilePath, sHelpFile, sTopicLink):
         ''' creates the object and opens the xml file'''
         self.sFilePath = sFilePath
-        self.rootNode = Element("toc", )
+        self.rootNode = Element("toc")
+        self.rootNode.set('label', sHelpFile)
+        self.rootNode.set('topic', "html/" + sTopicLink)
+        
 
         
     def writeTopic(self, sTopicName, sTopicFile, sIdString):
@@ -17,6 +20,7 @@ class TocFile:
     Take the name of the topic, the link to the topic file and the id as string
     and creates the xml node accordingly. Places it in the tree as well
     '''
+        
 
     def evaluateID(self, sIdString, nCurrentNode):
         ''' (string, xml node) -> xml node
